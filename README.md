@@ -66,3 +66,10 @@ A/B Testing Laboratory is an interactive web app built with Streamlit that empow
 ![Bayesian Results](screenshots/bayesian.png)  
 *Bayesian*  
 
+### Bootstrap Results  
+![Bootstrap Results](screenshots/Bootstrap.png)  
+*Bootstrap*  
+
+### Sequential Results  
+![Sequential Results](screenshots/Sequential.png)  
+*Sequential*  
