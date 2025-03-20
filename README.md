@@ -52,6 +52,9 @@ A/B Testing Laboratory is an interactive web app built with Streamlit that empow
 4. Explore results: Interactive plots, metrics, and summaries will auto-update.
 5. Compare experiments or export results as CSV.
 
+## Examples
+You can also explore examples in the examples folder. Inside, you'll find classic types of tests implemented in Jupyter notebooks using popular libraries. These examples demonstrate similar results and provide a practical reference for understanding how the test work in different contexts.
+
 ## 🎯 Why This Project Stands Out
 - All-in-One Testing: No need to switch between tools—compare methods in one interface.
 - Educational Tool: Guidelines and visualizations make complex stats accessible.
