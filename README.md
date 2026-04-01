@@ -45,6 +45,15 @@ A/B Testing Laboratory is an interactive web app built with Streamlit that empow
   ```bash
   streamlit run app/streamlit_app.py
   ```
+
+## 🧰 Development
+```bash
+pip install -r requirements.txt
+pytest
+ruff check .
+black --check .
+mypy app
+```
 ## Steps to Run a Test
 1. Select a test type (e.g., Bayesian, Bootstrap) from the sidebar.
 2. Upload data (CSV), use demo data, or input values manually.

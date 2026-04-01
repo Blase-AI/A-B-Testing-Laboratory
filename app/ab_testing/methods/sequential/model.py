@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, List, Literal, Optional
+from typing import Literal
 
 import numpy as np
-
 
 Decision = Literal["H0", "H1", "No decision"]
 
@@ -14,7 +14,7 @@ class SPRTResult:
     decision: Decision
     n_used: int
     final_log_lr: float
-    history: List[float]
+    history: list[float]
     upper_bound: float
     lower_bound: float
 
@@ -40,7 +40,7 @@ class SequentialSPRT:
 
     def run(self, data: np.ndarray) -> SPRTResult:
         log_lr = 0.0
-        history: List[float] = []
+        history: list[float] = []
 
         for i, x in enumerate(data, start=1):
             delta = float(np.log(self.f1(float(x))) - np.log(self.f0(float(x))))
@@ -52,5 +52,6 @@ class SequentialSPRT:
             if log_lr <= self.lower_bound:
                 return SPRTResult("H0", i, log_lr, history, self.upper_bound, self.lower_bound)
 
-        return SPRTResult("No decision", int(len(data)), log_lr, history, self.upper_bound, self.lower_bound)
-
+        return SPRTResult(
+            "No decision", int(len(data)), log_lr, history, self.upper_bound, self.lower_bound
+        )

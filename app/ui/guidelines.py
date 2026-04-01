@@ -101,4 +101,3 @@ def show_guidelines() -> None:
         | Gradual data collection      | Sequential test           |
         """
         )
-

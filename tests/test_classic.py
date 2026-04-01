@@ -21,4 +21,3 @@ def test_classic_stats_and_plots_smoke():
     assert test.plot_boxplot() is not None
     assert test.plot_mean_difference_ci() is not None
     assert test.plot_qq() is not None
-

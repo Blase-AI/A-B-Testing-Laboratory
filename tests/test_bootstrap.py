@@ -23,4 +23,3 @@ def test_bootstrap_diff_hist_degenerate_does_not_crash():
     b = np.array([1.0, 2.0, 3.0])
     test = BootstrapABTest(a, b)
     assert test.plot_bootstrap_diff_hist(n_bootstrap=2000) is not None
-

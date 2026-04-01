@@ -36,6 +36,7 @@ def test_top_level_classes_work():
     a = np.array([1.0, 2.0, 3.0])
     b = np.array([2.0, 3.0, 4.0])
     assert ab.ABTest(a, b).perform_t_test()["p_value"] is not None
-    assert ab.BootstrapABTest(a, b).get_bootstrap_statistics(n_bootstrap=2000)["p_value"] is not None
+    assert (
+        ab.BootstrapABTest(a, b).get_bootstrap_statistics(n_bootstrap=2000)["p_value"] is not None
+    )
     assert 0 <= ab.BayesianABTest(10, 2, 10, 3).compute_prob_B_better() <= 1
-

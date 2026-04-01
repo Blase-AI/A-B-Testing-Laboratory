@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 import numpy as np
 import streamlit as st
 
@@ -20,7 +18,9 @@ def _warn_small_samples(data_a: np.ndarray, data_b: np.ndarray, *, threshold: in
         st.warning("Recommended to use samples with ≥10 observations")
 
 
-def _two_group_input_block(*, data_input_method: str, logger) -> tuple[Optional[np.ndarray], Optional[np.ndarray]]:
+def _two_group_input_block(
+    *, data_input_method: str, logger
+) -> tuple[np.ndarray | None, np.ndarray | None]:
     data_a, data_b = None, None
 
     with st.expander("⚙️ Data Settings", expanded=True):
@@ -76,13 +76,17 @@ def main() -> None:
 
     if test_type == "Classic A/B":
         alpha = st.sidebar.slider("Significance level (α)", 0.01, 0.2, 0.05, key="alpha_classic")
-        min_sample_size = st.sidebar.number_input("Minimum sample size", 10, 1000, 30, key="min_sample")
+        min_sample_size = st.sidebar.number_input(
+            "Minimum sample size", 10, 1000, 30, key="min_sample"
+        )
     elif test_type == "Bayesian":
         col1, col2 = st.sidebar.columns(2)
         alpha_prior = col1.number_input("Alpha prior", 0.1, 10.0, 1.0, key="alpha_prior")
         beta_prior = col2.number_input("Beta prior", 0.1, 10.0, 1.0, key="beta_prior")
     elif test_type == "Bootstrap":
-        n_bootstrap = st.sidebar.number_input("Number of iterations", 100, 100000, 10000, key="n_bootstrap")
+        n_bootstrap = st.sidebar.number_input(
+            "Number of iterations", 100, 100000, 10000, key="n_bootstrap"
+        )
         ci_level = st.sidebar.slider("Confidence level", 0.8, 0.99, 0.95, key="ci_level")
     elif test_type == "Sequential":
         stop_threshold = st.sidebar.number_input("Stop threshold", 1, 100, 10, key="stop_threshold")
@@ -90,13 +94,17 @@ def main() -> None:
         alpha = st.sidebar.slider("Significance level (α)", 0.01, 0.2, 0.05, key="alpha_compare")
 
     if test_type != "Sequential":
-        data_input_method = st.sidebar.radio("Data input method:", ["Demo Data", "Upload CSV", "Manual Input"])
+        data_input_method = st.sidebar.radio(
+            "Data input method:", ["Demo Data", "Upload CSV", "Manual Input"]
+        )
         data_a, data_b = _two_group_input_block(data_input_method=data_input_method, logger=logger)
     else:
         data_a = data_b = None
 
     try:
         if test_type == "Classic A/B" and data_a is not None and data_b is not None:
+            assert alpha is not None
+            assert min_sample_size is not None
             render_classic_ab(
                 data_a,
                 data_b,
@@ -105,6 +113,8 @@ def main() -> None:
                 logger=logger,
             )
         elif test_type == "Bayesian" and data_a is not None and data_b is not None:
+            assert alpha_prior is not None
+            assert beta_prior is not None
             render_bayesian(
                 data_a,
                 data_b,
@@ -113,6 +123,8 @@ def main() -> None:
                 logger=logger,
             )
         elif test_type == "Bootstrap" and data_a is not None and data_b is not None:
+            assert n_bootstrap is not None
+            assert ci_level is not None
             render_bootstrap(
                 data_a,
                 data_b,
@@ -121,8 +133,10 @@ def main() -> None:
                 logger=logger,
             )
         elif test_type == "Sequential":
+            assert stop_threshold is not None
             render_sequential(stop_threshold=int(stop_threshold), logger=logger)
         elif test_type == "Experiment Comparison":
+            assert alpha is not None
             render_experiment_comparison(alpha=float(alpha), logger=logger)
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
@@ -137,9 +151,11 @@ def main() -> None:
             help="Open guidelines for testing methods and interpretation",
             use_container_width=True,
         ):
-            show_guidelines()
+            try:
+                st.switch_page("pages/Glossary.py")
+            except Exception:
+                show_guidelines()
 
 
 if __name__ == "__main__":
     main()
-

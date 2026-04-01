@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,11 +13,13 @@ def perform_power_analysis(
     alpha: float = 0.05,
     nobs1: int = 100,
     desired_power: float = 0.8,
-    sample_sizes: Optional[np.ndarray] = None,
-) -> Dict[str, Any]:
+    sample_sizes: np.ndarray | None = None,
+) -> dict[str, Any]:
     analysis = TTestIndPower()
     current_power = analysis.power(effect_size=effect_size, nobs1=nobs1, alpha=alpha, ratio=1.0)
-    required_n = analysis.solve_power(effect_size=effect_size, power=desired_power, alpha=alpha, ratio=1.0)
+    required_n = analysis.solve_power(
+        effect_size=effect_size, power=desired_power, alpha=alpha, ratio=1.0
+    )
 
     if sample_sizes is None:
         sample_sizes = np.arange(50, 2000, 50)
@@ -34,4 +36,3 @@ def perform_power_analysis(
     ax.grid(True)
 
     return {"current_power": current_power, "required_n": required_n, "figure": fig}
-

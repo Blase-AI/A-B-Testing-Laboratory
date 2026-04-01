@@ -17,4 +17,3 @@ def setup_app() -> logging.Logger:
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     return logging.getLogger("ab_testing_lab")
-

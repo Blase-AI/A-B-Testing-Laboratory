@@ -20,4 +20,3 @@ def test_bayesian_difference_hist_degenerate_does_not_crash():
 
     test = BayesianABTest(10, 0, 10, 0)
     assert test.plot_difference_hist_kde(num_samples=2000) is not None
-

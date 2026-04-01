@@ -10,4 +10,3 @@ __all__ = [
     "perform_power_analysis",
     "validate_numeric_1d",
 ]
-
