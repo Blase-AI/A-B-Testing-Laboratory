@@ -4,7 +4,7 @@ import logging
 
 import streamlit as st
 
-from app.ab_testing import Sequential_Testing
+from app.ab_testing import NormalSPRTSimulator, plot_sprt_history
 
 
 def render_sequential(*, stop_threshold: int, logger: logging.Logger) -> None:
@@ -24,29 +24,28 @@ def render_sequential(*, stop_threshold: int, logger: logging.Logger) -> None:
 
     if st.button("Start Simulation"):
         with st.spinner("Running simulation..."):
-            simulator = Sequential_Testing.SequentialTestSimulator(
-                mu0=mu0,
-                mu1=mu1,
-                sigma=sigma,
+            simulator = NormalSPRTSimulator(
+                mu0=float(mu0),
+                mu1=float(mu1),
+                sigma=float(sigma),
                 n=int(n),
-                alpha=alpha,
-                true_state=true_state,
-                verbose=False,
+                alpha=float(alpha),
+                true_state=str(true_state),
                 stop_threshold=int(stop_threshold),
             )
 
-            decision, n_used, _, _history = simulator.run()
+            result = simulator.run()
             st.subheader("Test Results")
             cols = st.columns(3)
-            cols[0].metric("Decision", decision)
-            cols[1].metric("Observations Used", n_used)
-            cols[2].metric("Efficiency", f"{(n_used/int(n))*100:.1f}%")
+            cols[0].metric("Decision", result.decision)
+            cols[1].metric("Observations Used", result.n_used)
+            cols[2].metric("Efficiency", f"{(result.n_used/int(n))*100:.1f}%")
 
-            st.pyplot(simulator.plot_history())
+            st.pyplot(plot_sprt_history(result))
 
             sim_results = simulator.run_simulations(n_simulations=50)
             st.subheader("Aggregated Simulation Results")
-            st.pyplot(simulator.plot_simulation_results(sim_results))
+            st.bar_chart(sim_results["decision_counts"])
 
-            logger.info("Sequential: decision=%s n_used=%s", decision, n_used)
+            logger.info("Sequential: decision=%s n_used=%s", result.decision, result.n_used)
 
