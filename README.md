@@ -61,6 +61,7 @@ A/B Testing Laboratory is an interactive web app built with Streamlit that empow
 ## Development
 ```bash
 pip install -r requirements.txt
+pre-commit install
 pytest
 ruff check .
 black --check .
