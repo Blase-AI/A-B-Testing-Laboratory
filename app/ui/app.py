@@ -137,7 +137,10 @@ def main() -> None:
             help="Open guidelines for testing methods and interpretation",
             use_container_width=True,
         ):
-            show_guidelines()
+            try:
+                st.switch_page("pages/Glossary.py")
+            except Exception:
+                show_guidelines()
 
 
 if __name__ == "__main__":
