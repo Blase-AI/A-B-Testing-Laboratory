@@ -14,6 +14,12 @@ ENV/
 # Jupyter
 .ipynb_checkpoints/
 
+# Python tooling / test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+.ruff_cache/
+
 # IDEs
 .idea/
 .vscode/
