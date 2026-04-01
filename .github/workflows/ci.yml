@@ -35,5 +35,5 @@ jobs:
         run: mypy app
 
       - name: Pytest
-        run: pytest
+        run: pytest --cov=app --cov-report=term-missing
 

@@ -23,3 +23,11 @@ def test_bootstrap_diff_hist_degenerate_does_not_crash():
     b = np.array([1.0, 2.0, 3.0])
     test = BootstrapABTest(a, b)
     assert test.plot_bootstrap_diff_hist(n_bootstrap=2000) is not None
+
+
+def test_bootstrap_p_value_in_range():
+    from app.ab_testing.methods.bootstrap import stats
+
+    diff = np.array([-1.0, 0.0, 1.0, 2.0])
+    p = stats.compute_bootstrap_p_value(diff)
+    assert 0.0 <= p <= 1.0
