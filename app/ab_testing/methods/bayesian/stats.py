@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import arviz as az
 import numpy as np
@@ -15,7 +15,7 @@ def make_posteriors(
     *,
     alpha_prior: float = 1.0,
     beta_prior: float = 1.0,
-) -> Tuple[stats.rv_continuous, stats.rv_continuous]:
+) -> tuple[stats.rv_continuous, stats.rv_continuous]:
     posterior_a = stats.beta(alpha_prior + successes_a, beta_prior + (n_a - successes_a))
     posterior_b = stats.beta(alpha_prior + successes_b, beta_prior + (n_b - successes_b))
     return posterior_a, posterior_b
@@ -30,9 +30,10 @@ def prob_b_better(posterior_a, posterior_b, *, num_samples: int = 10000) -> floa
     return float(np.mean(b > a))
 
 
-def difference_stats(posterior_a, posterior_b, *, num_samples: int = 10000, hdi_prob: float = 0.95) -> Dict[str, Any]:
+def difference_stats(
+    posterior_a, posterior_b, *, num_samples: int = 10000, hdi_prob: float = 0.95
+) -> dict[str, Any]:
     a, b = sample_posteriors(posterior_a, posterior_b, num_samples=num_samples)
     delta = b - a
     hdi_interval = az.hdi(delta, hdi_prob=hdi_prob)
     return {"delta": delta, "hdi_interval": hdi_interval}
-

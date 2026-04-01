@@ -8,7 +8,14 @@ import streamlit as st
 from app.ab_testing import ABTest
 
 
-def render_classic_ab(data_a: np.ndarray, data_b: np.ndarray, *, alpha: float, min_sample_size: int, logger: logging.Logger) -> None:
+def render_classic_ab(
+    data_a: np.ndarray,
+    data_b: np.ndarray,
+    *,
+    alpha: float,
+    min_sample_size: int,
+    logger: logging.Logger,
+) -> None:
     st.header("Classic A/B Test")
     with st.spinner("Performing analysis..."):
         ab = ABTest(data_a, data_b)
@@ -45,7 +52,9 @@ def render_classic_ab(data_a: np.ndarray, data_b: np.ndarray, *, alpha: float, m
             st.write(f"- Significance level: {alpha}")
             st.write(f"- Minimum sample size: {min_sample_size}")
 
-            logger.info("Classic A/B: test=%s p=%s d=%s", test_res.get("test"), test_res.get("p_value"), d)
+            logger.info(
+                "Classic A/B: test=%s p=%s d=%s", test_res.get("test"), test_res.get("p_value"), d
+            )
 
         with st.expander("Distribution Visualization"):
             st.pyplot(ab.plot_distribution())
@@ -58,4 +67,3 @@ def render_classic_ab(data_a: np.ndarray, data_b: np.ndarray, *, alpha: float, m
 
         with st.expander("Q-Q Plot for Normality Check"):
             st.pyplot(ab.plot_qq())
-

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, Mapping
+from collections.abc import Iterable, Mapping
+from typing import Any
 
 import pandas as pd
 import streamlit as st
@@ -15,4 +16,3 @@ def display_results_table(results: Iterable[Mapping[str, Any]]) -> None:
     st.download_button(
         "Download Results", data=csv, file_name="experiment_results.csv", mime="text/csv"
     )
-

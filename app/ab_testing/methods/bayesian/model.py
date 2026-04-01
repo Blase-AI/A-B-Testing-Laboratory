@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 from matplotlib.figure import Figure
 
@@ -47,7 +47,7 @@ class BayesianABTest(BaseABTest):
     def name(self) -> str:
         return "bayesian"
 
-    def summary(self) -> Dict[str, Any]:
+    def summary(self) -> dict[str, Any]:
         prob = self.compute_prob_B_better()
         return {"p_b_better": float(prob)}
 
@@ -58,24 +58,39 @@ class BayesianABTest(BaseABTest):
         return stats.prob_b_better(self.posterior_a, self.posterior_b, num_samples=num_samples)
 
     def compute_difference_stats(self, num_samples: int = 10000, hdi_prob: float = 0.95):
-        return stats.difference_stats(self.posterior_a, self.posterior_b, num_samples=num_samples, hdi_prob=hdi_prob)
+        return stats.difference_stats(
+            self.posterior_a, self.posterior_b, num_samples=num_samples, hdi_prob=hdi_prob
+        )
 
     def plot_posteriors(self, num_samples: int = 10000) -> Figure:
         return plots.plot_posteriors(self.posterior_a, self.posterior_b, num_samples=num_samples)
 
-    def plot_boxplot(self, num_samples: Optional[int] = None) -> Figure:
-        return plots.plot_boxplot(self.posterior_a, self.posterior_b, n_a=self.n_a, n_b=self.n_b, num_samples=num_samples)
+    def plot_boxplot(self, num_samples: int | None = None) -> Figure:
+        return plots.plot_boxplot(
+            self.posterior_a, self.posterior_b, n_a=self.n_a, n_b=self.n_b, num_samples=num_samples
+        )
 
     def plot_kde(self, num_samples: int = 10000) -> Figure:
         return plots.plot_kde(self.posterior_a, self.posterior_b, num_samples=num_samples)
 
     def plot_difference_hist_kde(self, num_samples: int = 10000) -> Figure:
-        return plots.plot_difference_hist_kde(self.posterior_a, self.posterior_b, num_samples=num_samples)
+        return plots.plot_difference_hist_kde(
+            self.posterior_a, self.posterior_b, num_samples=num_samples
+        )
 
     def plot_difference_cdf(self, num_samples: int = 10000) -> Figure:
-        return plots.plot_difference_cdf(self.posterior_a, self.posterior_b, num_samples=num_samples)
+        return plots.plot_difference_cdf(
+            self.posterior_a, self.posterior_b, num_samples=num_samples
+        )
 
     @staticmethod
-    def perform_power_analysis(effect_size: float, alpha: float, nobs1: int, desired_power: float, sample_sizes=None):
-        return perform_power_analysis(effect_size, alpha=alpha, nobs1=nobs1, desired_power=desired_power, sample_sizes=sample_sizes)
-
+    def perform_power_analysis(
+        effect_size: float, alpha: float, nobs1: int, desired_power: float, sample_sizes=None
+    ):
+        return perform_power_analysis(
+            effect_size,
+            alpha=alpha,
+            nobs1=nobs1,
+            desired_power=desired_power,
+            sample_sizes=sample_sizes,
+        )

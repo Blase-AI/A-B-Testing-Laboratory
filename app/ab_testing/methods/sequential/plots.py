@@ -16,4 +16,3 @@ def plot_sprt_history(result: SPRTResult) -> Figure:
     ax.set_title("SPRT Log-Likelihood Ratio Evolution")
     ax.legend()
     return fig
-

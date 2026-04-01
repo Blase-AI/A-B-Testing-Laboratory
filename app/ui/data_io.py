@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -16,7 +15,7 @@ class TwoGroupData:
 
 
 @st.cache_data
-def load_csv_first_column(uploader, group_name: str, logger: logging.Logger) -> Optional[np.ndarray]:
+def load_csv_first_column(uploader, group_name: str, logger: logging.Logger) -> np.ndarray | None:
     """Load numeric data from the first CSV column."""
     try:
         if uploader is None:
@@ -32,7 +31,9 @@ def load_csv_first_column(uploader, group_name: str, logger: logging.Logger) -> 
         return None
 
 
-def parse_manual_csv_floats(raw_input: str, group_name: str, logger: logging.Logger) -> Optional[np.ndarray]:
+def parse_manual_csv_floats(
+    raw_input: str, group_name: str, logger: logging.Logger
+) -> np.ndarray | None:
     """Parse comma-separated floats from textarea input."""
     try:
         values = [float(x.strip()) for x in raw_input.split(",") if x.strip()]
@@ -44,8 +45,9 @@ def parse_manual_csv_floats(raw_input: str, group_name: str, logger: logging.Log
         return None
 
 
-def demo_continuous_groups(mean_a: float = 50, mean_b: float = 55, sigma: float = 10, n: int = 1000) -> TwoGroupData:
+def demo_continuous_groups(
+    mean_a: float = 50, mean_b: float = 55, sigma: float = 10, n: int = 1000
+) -> TwoGroupData:
     a = np.random.normal(mean_a, sigma, n)
     b = np.random.normal(mean_b, sigma, n)
     return TwoGroupData(a=a, b=b)
-

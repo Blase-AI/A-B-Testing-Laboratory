@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 import numpy as np
 import seaborn as sns
 from matplotlib.figure import Figure
@@ -11,9 +9,15 @@ from .stats import compute_bootstrap_diff, compute_bootstrap_means
 
 
 def plot_bootstrap_distributions(
-    group_a: np.ndarray, group_b: np.ndarray, *, n_bootstrap: int = 10000, random_state: Optional[int] = 42
+    group_a: np.ndarray,
+    group_b: np.ndarray,
+    *,
+    n_bootstrap: int = 10000,
+    random_state: int | None = 42,
 ) -> Figure:
-    means_a, means_b = compute_bootstrap_means(group_a, group_b, n_bootstrap=n_bootstrap, random_state=random_state)
+    means_a, means_b = compute_bootstrap_means(
+        group_a, group_b, n_bootstrap=n_bootstrap, random_state=random_state
+    )
     fig, ax = new_figure(figsize=(12, 6))
     sns.kdeplot(means_a, label="Bootstrapped means A", fill=True, color="tab:blue", ax=ax)
     sns.kdeplot(means_b, label="Bootstrapped means B", fill=True, color="tab:orange", ax=ax)
@@ -25,9 +29,15 @@ def plot_bootstrap_distributions(
 
 
 def plot_bootstrap_diff_hist(
-    group_a: np.ndarray, group_b: np.ndarray, *, n_bootstrap: int = 10000, random_state: Optional[int] = 42
+    group_a: np.ndarray,
+    group_b: np.ndarray,
+    *,
+    n_bootstrap: int = 10000,
+    random_state: int | None = 42,
 ) -> Figure:
-    boot_diff = compute_bootstrap_diff(group_a, group_b, n_bootstrap=n_bootstrap, random_state=random_state)
+    boot_diff = compute_bootstrap_diff(
+        group_a, group_b, n_bootstrap=n_bootstrap, random_state=random_state
+    )
     fig, ax = new_figure(figsize=(12, 6))
     vmin = float(np.min(boot_diff))
     vmax = float(np.max(boot_diff))
@@ -47,9 +57,15 @@ def plot_bootstrap_diff_hist(
 
 
 def plot_bootstrap_diff_ecdf(
-    group_a: np.ndarray, group_b: np.ndarray, *, n_bootstrap: int = 10000, random_state: Optional[int] = 42
+    group_a: np.ndarray,
+    group_b: np.ndarray,
+    *,
+    n_bootstrap: int = 10000,
+    random_state: int | None = 42,
 ) -> Figure:
-    boot_diff = compute_bootstrap_diff(group_a, group_b, n_bootstrap=n_bootstrap, random_state=random_state)
+    boot_diff = compute_bootstrap_diff(
+        group_a, group_b, n_bootstrap=n_bootstrap, random_state=random_state
+    )
     fig, ax = new_figure(figsize=(12, 6))
     sns.ecdfplot(boot_diff, color="darkgreen", ax=ax)
     ax.axvline(0, color="red", linestyle="dashed")
@@ -57,4 +73,3 @@ def plot_bootstrap_diff_ecdf(
     ax.set_ylabel("Cumulative Probability")
     ax.set_title("Bootstrap difference ECDF (B - A)")
     return fig
-

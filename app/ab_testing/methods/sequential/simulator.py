@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Optional
 
 import numpy as np
 from scipy.stats import norm
 
-from .model import SPRTResult, SequentialSPRT
+from .model import SequentialSPRT, SPRTResult
 
 
 @dataclass
@@ -18,8 +17,8 @@ class NormalSPRTSimulator:
     alpha: float = 0.05
     beta: float = 0.2
     true_state: str = "H0"
-    random_seed: Optional[int] = None
-    stop_threshold: Optional[int] = None
+    random_seed: int | None = None
+    stop_threshold: int | None = None
 
     def _generate(self) -> np.ndarray:
         rng = np.random.default_rng(self.random_seed)
@@ -31,12 +30,16 @@ class NormalSPRTSimulator:
         if self.stop_threshold is not None:
             data = data[: int(self.stop_threshold)]
 
-        f0 = lambda x: norm.pdf(x, loc=self.mu0, scale=self.sigma)
-        f1 = lambda x: norm.pdf(x, loc=self.mu1, scale=self.sigma)
+        def f0(x: float) -> float:
+            return float(norm.pdf(x, loc=self.mu0, scale=self.sigma))
+
+        def f1(x: float) -> float:
+            return float(norm.pdf(x, loc=self.mu1, scale=self.sigma))
+
         sprt = SequentialSPRT(f0, f1, alpha=self.alpha, beta=self.beta, verbose=False)
         return sprt.run(data)
 
-    def run_simulations(self, n_simulations: int = 100) -> Dict[str, object]:
+    def run_simulations(self, n_simulations: int = 100) -> dict[str, object]:
         decisions = []
         n_used_list = []
         final_log_lr_list = []
@@ -59,4 +62,3 @@ class NormalSPRTSimulator:
             "n_used_list": n_used_list,
             "final_log_lr_list": final_log_lr_list,
         }
-

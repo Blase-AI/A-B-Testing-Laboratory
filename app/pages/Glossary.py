@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 st.set_page_config(page_title="Glossary", layout="wide")
 
 st.title("Glossary")
@@ -67,6 +66,10 @@ with st.expander("Bayesian (Beta-Binomial style demo)", expanded=False):
 
 **Parameters**
 - **Alpha prior / Beta prior**: prior strength; larger values → stronger prior pull
+
+**Important**
+- The Beta-Binomial model requires a binary definition of **success**.
+- If your metric is continuous, define a principled success criterion (e.g. conversion) or use another Bayesian model.
 """
     )
 
@@ -113,4 +116,3 @@ st.markdown(
 - Always check practical significance: small p-value can still be a tiny change.
 """
 )
-

@@ -42,4 +42,3 @@ def render_bootstrap(
 
         with st.expander("ECDF Plot"):
             st.pyplot(boot.plot_bootstrap_diff_ecdf(n_bootstrap=n_bootstrap))
-

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import logging
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
@@ -34,9 +34,7 @@ def render_experiment_comparison(*, alpha: float, logger: logging.Logger) -> Non
             mean_shift = i * 2
             data_a = np.random.normal(50, 10, 1000)
             data_b = np.random.normal(50 + mean_shift + 5, 10, 1000)
-            st.info(
-                f"Experiment {i+1}: Group A ~ N(50,10), Group B ~ N({50+mean_shift+5},10)"
-            )
+            st.info(f"Experiment {i+1}: Group A ~ N(50,10), Group B ~ N({50+mean_shift+5},10)")
             logger.info("Experiment %s: demo data created mean_shift=%s", i + 1, mean_shift)
 
         elif exp_data_input_method == "Upload CSV":
@@ -99,9 +97,7 @@ def render_experiment_comparison(*, alpha: float, logger: logging.Logger) -> Non
         }
         experiment_results.append(result_summary)
         st.success(f"Experiment {i+1} completed successfully")
-        logger.info(
-            "Experiment %s: p=%.4f d=%.3f", i + 1, test_res["p_value"], cohens_d
-        )
+        logger.info("Experiment %s: p=%.4f d=%.3f", i + 1, test_res["p_value"], cohens_d)
 
     if not experiment_results:
         return
@@ -113,4 +109,3 @@ def render_experiment_comparison(*, alpha: float, logger: logging.Logger) -> Non
     )
     ax.set_title("p-value Dynamics Across Experiments")
     st.pyplot(fig)
-

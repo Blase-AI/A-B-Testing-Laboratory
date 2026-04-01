@@ -8,11 +8,35 @@ import streamlit as st
 from app.ab_testing import BayesianABTest
 
 
-def render_bayesian(data_a: np.ndarray, data_b: np.ndarray, *, alpha_prior: float, beta_prior: float, logger: logging.Logger) -> None:
+def render_bayesian(
+    data_a: np.ndarray,
+    data_b: np.ndarray,
+    *,
+    alpha_prior: float,
+    beta_prior: float,
+    logger: logging.Logger,
+) -> None:
     st.header("Bayesian Analysis")
     with st.spinner("Performing Bayesian analysis..."):
-        n_a, success_a = len(data_a), int(np.sum(data_a > np.mean(data_a)))
-        n_b, success_b = len(data_b), int(np.sum(data_b > np.mean(data_b)))
+        mode = st.radio(
+            "Bayesian input mode",
+            ["Binary metric (0/1)", "Proxy from continuous metric"],
+            help="Bayesian model here is Beta-Binomial: it needs a binary success definition.",
+            horizontal=True,
+        )
+
+        if mode == "Binary metric (0/1)":
+            success_a = int(np.sum(np.asarray(data_a) == 1))
+            success_b = int(np.sum(np.asarray(data_b) == 1))
+            n_a, n_b = len(data_a), len(data_b)
+            st.caption("Interpreting inputs as 0/1 values. Success = value == 1.")
+        else:
+            n_a, success_a = len(data_a), int(np.sum(data_a > np.mean(data_a)))
+            n_b, success_b = len(data_b), int(np.sum(data_b > np.mean(data_b)))
+            st.warning(
+                "Proxy mode: success is defined as x > mean(x) within each group. "
+                "This is a demo heuristic; prefer a real binary metric for Bayesian mode."
+            )
 
         bab = BayesianABTest(
             n_a,
@@ -46,4 +70,3 @@ def render_bayesian(data_a: np.ndarray, data_b: np.ndarray, *, alpha_prior: floa
 
         with st.expander("CDF Plot for Difference Between Groups"):
             st.pyplot(bab.plot_difference_cdf())
-

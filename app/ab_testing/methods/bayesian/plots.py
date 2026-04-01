@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -15,8 +13,26 @@ def plot_posteriors(posterior_a, posterior_b, *, num_samples: int = 10000) -> Fi
     samples_a, samples_b = sample_posteriors(posterior_a, posterior_b, num_samples=num_samples)
     fig, ax = new_figure(figsize=(12, 6))
     bins = max(20, int(np.sqrt(num_samples)))
-    sns.histplot(samples_a, color="tab:blue", label="Group A", kde=True, stat="density", bins=bins, ax=ax, alpha=0.45)
-    sns.histplot(samples_b, color="tab:orange", label="Group B", kde=True, stat="density", bins=bins, ax=ax, alpha=0.45)
+    sns.histplot(
+        samples_a,
+        color="tab:blue",
+        label="Group A",
+        kde=True,
+        stat="density",
+        bins=bins,
+        ax=ax,
+        alpha=0.45,
+    )
+    sns.histplot(
+        samples_b,
+        color="tab:orange",
+        label="Group B",
+        kde=True,
+        stat="density",
+        bins=bins,
+        ax=ax,
+        alpha=0.45,
+    )
     ax.set_title("Posterior distributions (A vs B)")
     ax.set_xlabel("Conversion Rate")
     ax.set_ylabel("Density")
@@ -24,7 +40,9 @@ def plot_posteriors(posterior_a, posterior_b, *, num_samples: int = 10000) -> Fi
     return fig
 
 
-def plot_boxplot(posterior_a, posterior_b, *, n_a: int, n_b: int, num_samples: Optional[int] = None) -> Figure:
+def plot_boxplot(
+    posterior_a, posterior_b, *, n_a: int, n_b: int, num_samples: int | None = None
+) -> Figure:
     if num_samples is None:
         samples_a = posterior_a.rvs(n_a)
         samples_b = posterior_b.rvs(n_b)
@@ -32,7 +50,10 @@ def plot_boxplot(posterior_a, posterior_b, *, n_a: int, n_b: int, num_samples: O
         samples_a, samples_b = sample_posteriors(posterior_a, posterior_b, num_samples=num_samples)
 
     data = pd.DataFrame(
-        {"Group": ["A"] * len(samples_a) + ["B"] * len(samples_b), "Value": np.concatenate([samples_a, samples_b])}
+        {
+            "Group": ["A"] * len(samples_a) + ["B"] * len(samples_b),
+            "Value": np.concatenate([samples_a, samples_b]),
+        }
     )
     fig, ax = new_figure(figsize=(8, 6))
     sns.boxplot(
@@ -89,4 +110,3 @@ def plot_difference_cdf(posterior_a, posterior_b, *, num_samples: int = 10000) -
     ax.set_ylabel("Cumulative Probability")
     ax.set_title("Posterior difference CDF")
     return fig
-

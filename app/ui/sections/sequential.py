@@ -48,4 +48,3 @@ def render_sequential(*, stop_threshold: int, logger: logging.Logger) -> None:
             st.bar_chart(sim_results["decision_counts"])
 
             logger.info("Sequential: decision=%s n_used=%s", result.decision, result.n_used)
-
